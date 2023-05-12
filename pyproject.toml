@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "youtube-analytics"
+version = "0.1.0"
+description = "big data for a big guy"
+authors = ["Chase <robertchasesommer@gmail.com>"]
+readme = "README.md"
+packages = [{include = "youtube_analytics"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.0.1"
+dash = "^2.9.3"
+google-auth-oauthlib = "^1.0.0"
+google-api-python-client = "^2.86.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
