@@ -11,4 +11,8 @@ def init_app():
         # Import parts of our core Flask app
         from . import routes
 
+        # Import Dash Applications:
+        from .dashboards.sample_dash import init_dashboard
+        app = init_dashboard(app)
+
         return app
