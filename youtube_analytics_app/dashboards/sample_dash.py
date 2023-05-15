@@ -4,8 +4,8 @@ from dash import dash_table
 from dash import dcc
 from dash import html
 
-from .data import create_dataframe
-from .layout import html_layout
+# from .data import create_dataframe
+# from .layout import html_layout
 
 
 def init_dashboard(server):
@@ -20,10 +20,10 @@ def init_dashboard(server):
     )
 
     # Load DataFrame
-    df = create_dataframe()
+    # df = create_dataframe()
 
     # Custom HTML layout
-    dash_app.index_string = html_layout
+    # dash_app.index_string = html_layout
 
     # Create Layout
     dash_app.layout = html.Div(
@@ -31,7 +31,7 @@ def init_dashboard(server):
             dcc.Graph(
                 id="histogram-graph",
                 figure={
-                    "data": [
+                    '''"data": [
                         {
                             "x": df["complaint_type"],
                             "text": df["complaint_type"],
@@ -39,7 +39,7 @@ def init_dashboard(server):
                             "name": "311 Calls by region.",
                             "type": "histogram",
                         }
-                    ],
+                    ],'''
                     "layout": {
                         "title": "NYC 311 Calls category.",
                         "height": 500,
@@ -47,7 +47,7 @@ def init_dashboard(server):
                     },
                 },
             ),
-            create_data_table(df),
+            # create_data_table(df),
         ],
         id="dash-container",
     )
