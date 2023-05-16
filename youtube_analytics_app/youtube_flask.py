@@ -10,6 +10,7 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 
 from dash import Dash, html, dcc, callback, Output, Input
+from . import init_app
 import plotly.express as px
 import pandas as pd
 
@@ -23,14 +24,14 @@ SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
 API_SERVICE_NAME = 'youtubeAnalytics'
 API_VERSION = 'v2'
 
-app = flask.Flask(__name__)
+# app = flask.Flask(__name__)
 # app = Dash(__name__)
 
 # Note: A secret key is included in the sample so that it works.
 # If you use this code in your application, replace this with a truly secret
 # key. See https://flask.palletsprojects.com/quickstart/#sessions.
-#secrets.token_hex()
-app.secret_key = '7445bc149f2b79f5c0a71371ecf9c7fbd2853de80b32777b9da170596a2661f8'
+# secrets.token_hex()
+# app.secret_key = '7445bc149f2b79f5c0a71371ecf9c7fbd2853de80b32777b9da170596a2661f8'
 
 
 @app.route('/')
@@ -42,6 +43,7 @@ def index():
 def test_api_request():
   if 'credentials' not in flask.session:
     return flask.redirect('authorize')
+
 
   # Load credentials from the session.
   credentials = google.oauth2.credentials.Credentials(

@@ -2,11 +2,23 @@
 from flask import current_app as app
 from flask import render_template
 import flask
+import requests
+from datetime import datetime
 
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 
+
+# This variable specifies the name of a file that contains the OAuth 2.0
+# information for this application, including its client_id and client_secret.
+CLIENT_SECRETS_FILE = "client_secret_web.json"
+
+# This OAuth 2.0 access scope allows for full read/write access to the
+# authenticated user's account and requires requests to use an SSL connection.
+SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
+API_SERVICE_NAME = 'youtubeAnalytics'
+API_VERSION = 'v2'
 
 @app.route("/")
 def home():
@@ -24,6 +36,35 @@ def home():
 def test_api_request():
   if 'credentials' not in flask.session:
     return flask.redirect('authorize')
+
+
+  # Load credentials from the session.
+  credentials = google.oauth2.credentials.Credentials(
+      **flask.session['credentials'])
+
+  youtubeAnalytics = googleapiclient.discovery.build(
+      API_SERVICE_NAME, API_VERSION, credentials=credentials)
+
+  today = datetime.today().strftime('%Y-%m-%d')
+
+  #report = youtube.reports().query(ids='channel==MINE', start_date='2016-05-01', end_date='2016-06-30', metrics='views').execute()
+      
+  #youtubeAnalytics = get_service()
+  report = youtubeAnalytics.reports().query(
+        ids="channel==MINE",
+        startDate="2022-01-01",
+        endDate=today,
+        metrics="views,likes,subscribersGained,estimatedMinutesWatched,averageViewDuration,shares",
+        dimensions="day,creatorContentType",
+        sort="day"
+    ).execute()
+
+  # Save credentials back to session in case access token was refreshed.
+  # ACTION ITEM: In a production app, you likely want to save these
+  #              credentials in a persistent database instead.
+  flask.session['credentials'] = credentials_to_dict(credentials)
+
+  return flask.jsonify(**report)
 
 
 @app.route('/authorize')
@@ -93,6 +134,7 @@ def revoke():
     return('Credentials successfully revoked.' + print_index_table())
   else:
     return('An error occurred.' + print_index_table())
+  
   
 @app.route('/clear')
 def clear_credentials():
