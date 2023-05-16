@@ -87,5 +87,5 @@ def update_graph(value):
     dff = df[df['country']==value]
     return px.line(dff, x='year', y='pop')
 
-if __name__ == '__main__':
-    app.run_server(debug=True)
+#if __name__ == '__main__':
+#    app.run_server(debug=True)
